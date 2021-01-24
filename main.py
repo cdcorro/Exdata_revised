@@ -1,23 +1,54 @@
-from flask import Flask, render_template,request,flash, redirect, url_for, send_file
+from flask import   Flask, \
+                    render_template, \
+                    request,flash, \
+                    redirect, \
+                    url_for, \
+                    send_file, \
+                    after_this_request
+from flask_caching import Cache
+from threading import Thread, Event
 import pandas as pd
 import mammoth
 import docx2txt
-import time
 import glob
 import os
+import time
 
-app = Flask(__name__)
+config = {
+    "DEBUG": False,             # some Flask specific configs
+    "CACHE_TYPE": "simple",     # Flask-Caching related configs
+    "CACHE_DEFAULT_TIMEOUT": 1
+}
 
+app = Flask(__name__)           #initialize app
+app.config.from_mapping(config) #set app with configurations
+cache = Cache(app)              #create cache instance for app
 
-UPLOAD_FOLDER = './tempFiles'
+UPLOAD_FOLDER = './tempFiles'   #folder path for uploading documents
 ALLOWED_EXTENSIONS = {'docx'}
 
-app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def clearFile():
+    df = pd.DataFrame()
+    with pd.ExcelWriter('./tempFiles/output.xlsx') as writer:
+        df.to_excel(writer,sheet_name = "null")
+    return '';
+
+class MyThread(Thread):
+    def __init__(self,event):
+        Thread.__init__(self)
+        self.stopped = event
+
+    def run(self):
+        time.sleep(3)
+        print("clearing files")
+        clearFile()
 
 
 @app.route('/')
 def index():
+    clearFile()
     return render_template('index.html')
 
 @app.route('/instructions', methods=['GET', 'POST'])
@@ -97,6 +128,19 @@ def convert():
 
             sheets.append(result)
             
+        #clean files not being used
+        folder = './tempFiles'
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
+
+        #save to an xlsx with multiple sheets    
         with pd.ExcelWriter('./tempFiles/output.xlsx') as writer:
             x = 0
             for df in sheets:
@@ -107,7 +151,17 @@ def convert():
 
 @app.route('/download')
 def downloadScreen():
-    return send_file('./tempFiles/output.xlsx',as_attachment=True)
+
+    #clear cache to download updated file
+    with app.app_context():
+        cache.clear()
+        
+    stopFlag = Event()
+    thread = MyThread(stopFlag)
+    thread.start()
+    
+    #download file
+    return send_file('./tempFiles/output.xlsx',as_attachment=True, cache_timeout=0)
 
 from werkzeug.middleware.shared_data import SharedDataMiddleware
 app.add_url_rule('/uploads/<filename>', 'uploaded_file',build_only=True)
