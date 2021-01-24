@@ -9,3 +9,4 @@ needed python libraries:
   - pandas
   - mammoth
   - docx2txt
+  - openpyxl
