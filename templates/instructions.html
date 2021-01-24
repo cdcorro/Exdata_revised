@@ -1,0 +1,11 @@
+<!doctype html>
+<html>
+<body>
+    <p><a href="./">go back to instructions</a></p>
+	<h1>Upload new File</h1>
+    <form method="POST" enctype="multipart/form-data">
+      <input type="file" name="file[]" multiple>
+      <input type="submit" value="convert">
+    </form>
+	<a href="{{url_for('downloadScreen')}}">download here </a>
+</html>
