@@ -14,7 +14,7 @@ mammoth==1.4.15
 MarkupSafe==1.1.1
 numpy==1.19.5
 openpyxl==3.0.6
-pandas==1.2.1
+pandas==1.1.5
 python-dateutil==2.8.1
 python-docx==0.8.10
 pytz==2020.5
