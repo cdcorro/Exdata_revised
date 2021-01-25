@@ -145,7 +145,12 @@ def convert():
             x = 0
             for df in sheets:
                 df.to_excel(writer,sheet_name=DocxFiles[x].filename)
-                x += 1       
+                worksheet = writer.sheets[str(DocxFiles[x].filename)]  # pull worksheet object
+                worksheet.set_column('B:B', 60)  # set column width
+                worksheet.set_column('C:C', 60)  # set column width
+                worksheet.set_column('D:D', 15)  # set column width
+                x += 1
+                
         #clear info if not dowloaded in 30 seconds
         stopFlag = Event()
         SubmitThread = MyThread(stopFlag)
