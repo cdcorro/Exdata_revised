@@ -51,7 +51,7 @@ def index():
     clearFile()
     return render_template('index.html')
 
-@app.route('/Converter', methods=['GET', 'POST'])
+@app.route('/converter', methods=['GET', 'POST'])
 def convert():
     if request.method == 'POST':
         
