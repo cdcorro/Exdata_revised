@@ -36,12 +36,12 @@ def clearFile():
     return '';
 
 class MyThread(Thread):
+    timer = 3
     def __init__(self,event):
         Thread.__init__(self)
         self.stopped = event
-
     def run(self):
-        time.sleep(3)
+        time.sleep(self.timer)
         print("clearing files")
         clearFile()
 
@@ -51,7 +51,7 @@ def index():
     clearFile()
     return render_template('index.html')
 
-@app.route('/instructions', methods=['GET', 'POST'])
+@app.route('/Converter', methods=['GET', 'POST'])
 def convert():
     if request.method == 'POST':
         
@@ -146,8 +146,13 @@ def convert():
             for df in sheets:
                 df.to_excel(writer,sheet_name=DocxFiles[x].filename)
                 x += 1       
+        #clear info if not dowloaded in 30 seconds
+        stopFlag = Event()
+        SubmitThread = MyThread(stopFlag)
+        SubmitThread.timer = 30
+        SubmitThread.start()
         
-    return render_template('instructions.html')
+    return render_template('converter.html')
 
 @app.route('/download')
 def downloadScreen():
@@ -155,9 +160,10 @@ def downloadScreen():
     #clear cache to download updated file
     with app.app_context():
         cache.clear()
-        
+    #clear info 3 seconds after downloading    
     stopFlag = Event()
     thread = MyThread(stopFlag)
+    thread.timer = 3
     thread.start()
     
     #download file
