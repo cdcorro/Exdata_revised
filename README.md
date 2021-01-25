@@ -10,3 +10,4 @@ needed python libraries:
   - mammoth
   - docx2txt
   - openpyxl
+  - xlsxwritter
