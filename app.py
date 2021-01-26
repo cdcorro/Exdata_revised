@@ -53,7 +53,6 @@ def index():
 
 @app.route('/converter', methods=['GET', 'POST'])
 def convert():
-    clearFile()
     if request.method == 'POST':
         
         files = request.files.getlist("file[]") #Read files
@@ -152,28 +151,18 @@ def convert():
                 worksheet.set_column('D:D', 15)  # set column width
                 x += 1
                 
-        #clear info if not dowloaded in 30 seconds
+        #clear cache to download updated file
+        with app.app_context():
+            cache.clear()
+        #clear info 3 seconds after downloading    
         stopFlag = Event()
-        SubmitThread = MyThread(stopFlag)
-        SubmitThread.timer = 30
-        SubmitThread.start()
-        
-    return render_template('converter.html')
+        thread = MyThread(stopFlag)
+        thread.timer = 3
+        thread.start()
 
-@app.route('/download')
-def downloadScreen():
-
-    #clear cache to download updated file
-    with app.app_context():
-        cache.clear()
-    #clear info 3 seconds after downloading    
-    stopFlag = Event()
-    thread = MyThread(stopFlag)
-    thread.timer = 3
-    thread.start()
+        return send_file('./tempFiles/output.xlsx',as_attachment=True, cache_timeout=0)
     
-    #download file
-    return send_file('./tempFiles/output.xlsx',as_attachment=True, cache_timeout=0)
+    return render_template('converter.html')
 
 from werkzeug.middleware.shared_data import SharedDataMiddleware
 app.add_url_rule('/uploads/<filename>', 'uploaded_file',build_only=True)
