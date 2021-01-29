@@ -53,6 +53,7 @@ def index():
 
 @app.route('/converter', methods=['GET', 'POST'])
 def convert():
+    clearFile()
     if request.method == 'POST':
         
         files = request.files.getlist("file[]") #Read files
