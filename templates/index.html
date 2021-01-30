@@ -36,7 +36,9 @@
 		     			      <h5 class="mb-0"> <a data-toggle="collapse" href="#collapseOne1" role="button" aria-expanded="true" aria-controls="collapseOne1"> Input format (with example file) </a> </h5>
 	     			        </div>
 		     			    <div id="collapseOne1" class="collapse show" role="tabpanel" aria-labelledby="headingOne1" data-parent="#accordion1">
-		     			      <div class="card-body">Content for Accordion Panel 1</div>
+		     			      <div class="card-body">
+                        Files uploaded to the converter should follow this <a href="{{ url_for('static', filename='files/empty.docx') }}">template. </a>
+                    </div>
 	     			        </div>
      			      </div>
 		     			  <div class="card">
@@ -44,7 +46,47 @@
 		     			      <h5 class="mb-0"> <a class="collapsed" data-toggle="collapse" href="#collapseTwo1" role="button" aria-expanded="false" aria-controls="collapseTwo1"> How to use ExData </a> </h5>
 	     			        </div>
 		     			    <div id="collapseTwo1" class="collapse" role="tabpanel" aria-labelledby="headingTwo1" data-parent="#accordion1">
-		     			      <div class="card-body">Content for Accordion Panel 2</div>
+		     			      <div class="card-body">
+                      <br />
+                      <h3 style='text-align: left'>Step 1: </h3><br />
+                      <p style='text-align: left'>
+                        Click the 'Begin' button to go to the converter, or if you have any questions on how to use the converter, click on the 'How to use Exdata' accordian to see instructions. If you want a template of the input file, use the download link in the 'Input format (with example file) accordian'
+                      </p>
+                      <img src="{{ url_for('static', filename='images/1.png') }}" style="width: 50%">
+                      <br />
+                      <hr class="my-4">
+                      <br />
+                      <h3 style='text-align: left'>Step 2: </h3><br />
+                      <p style='text-align: left'>
+                        Click 'Go Back' to return to the home page, or you can click on 'Choose files' to select the report documents to be converted.
+                      </p>
+                      <img src="{{ url_for('static', filename='images/2.png') }}" style="width: 50%">
+                      <br />
+                      <hr class="my-4">
+                      <br />
+                      <h3 style='text-align: left'>Step 3: </h3><br />
+                      <p style='text-align: left'>
+                        Once you click on 'Choose files', a file explorer window will open, where you can choose multiple .docx reports which follow the format of the template. Not following the template will result in the converter failing.
+                      </p>
+                      <img src="{{ url_for('static', filename='images/3.png') }}" style="width: 50%">
+                      <br />
+                      <hr class="my-4">
+                      <br />
+                      <h3 style='text-align: left'>Step 4: </h3><br />
+                      <p style='text-align: left'>
+                        After you have selected the report documents to be converted, the files selected will appear in the queue. Don't see the file you want? Click on 'Try again' to clear the queue, and repeat from Step 2.
+                      </p>
+                      <img src="{{ url_for('static', filename='images/4.png') }}" style="width: 50%">
+                      <br />
+                      <hr class="my-4">
+                      <br />
+                      <h3 style='text-align: left'>Step 5: </h3><br />
+                      <p style='text-align: left'>
+                        Click on 'Convert' to strt the conversion of multiple report .docx files to a single Excel .xlsx file. If you selected multiple files, each .docx file will be converted to a seperate sheet in the Excel file. The sheet name would be the name of the report .docx file. The Excel output would begin to download as soon as the conversion is complete. Keep in mind that larger files take longer to convert.
+                      </p>
+                      <img src="{{ url_for('static', filename='images/5.png') }}" style="width: 50%">
+
+                    </div>
 	     			        </div>
      			      </div>
 		     			  <div class="card">
@@ -52,7 +94,10 @@
 		     			      <h5 class="mb-0"> <a class="collapsed" data-toggle="collapse" href="#collapseThree1" role="button" aria-expanded="false" aria-controls="collapseThree1"> Documentation </a> </h5>
 	     			        </div>
 		     			    <div id="collapseThree1" class="collapse" role="tabpanel" aria-labelledby="headingThree1" data-parent="#accordion1">
-		     			      <div class="card-body">Content for Accordion Panel 3</div>
+		     			      <div class="card-body">
+                    <b>Developers:</b>  Charles Corro and Nitin Ramesh. <br />
+                    <b>Tools used:</b> Python Flask, HTML, CSS
+                    </div>
 	     			        </div>
      			      </div>
      			  </div>
